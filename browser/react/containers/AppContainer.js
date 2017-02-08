@@ -26,6 +26,7 @@ export default class AppContainer extends Component {
   }
 
   componentDidMount () {
+    const id = this.selectedArtist;
     axios.get('/api/albums/')
       .then(res => res.data)
       .then(album => this.onLoad(convertAlbums(album)));
@@ -108,8 +109,23 @@ export default class AppContainer extends Component {
   selectArtist (artistId) {
     axios.get(`/api/artists/${artistId}`)
       .then(res => this.setState({
-        selectedArtist: res.data.id
-      }));
+        selectedArtist: res.data
+        })
+      );
+    
+    axios.get(`/api/artists/${artistId}/albums/`)
+      .then(res => this.setState({
+        selectedArtistAlbums: res.data
+        })
+      );
+      
+    
+    axios.get(`/api/artists/${artistId}/songs/`)
+      .then(res => this.setState({
+        selectedArtistSongs: res.data
+        })
+      );
+    
   }
 
   render () {
@@ -130,7 +146,9 @@ export default class AppContainer extends Component {
             selectAlbum: this.selectAlbum,
             artists: this.state.artists,
             selectedArtist: this.state.selectedArtist,
-            selectArtist: this.selectArtist
+            selectArtist: this.selectArtist,
+            selectedArtistAlbums : this.state.selectedArtistAlbums,
+            selectedArtistSongs: this.state.selectedArtistSongs
           }) : null 
         }
         </div>

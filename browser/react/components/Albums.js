@@ -5,13 +5,13 @@ const Albums = (props) => {
 
   const albums = props.albums;
   const selectAlbum = props.selectAlbum;
-  console.log('props: ', props);
+  console.log('we are rendering albums with: ', props);
   return (
     <div>
       <h3>Albums</h3>
       <div className="row">
       {
-        albums.map(album => (
+        albums && albums.map(album => (
           <div className="col-xs-4" key={ album.id }>
             <Link className="thumbnail" to={`/albums/${album.id}`} onClick={() => selectAlbum(album.id)}>
               <img src={ album.imageUrl } />
