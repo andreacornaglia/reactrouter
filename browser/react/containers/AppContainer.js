@@ -16,13 +16,13 @@ export default class AppContainer extends Component {
   constructor (props) {
     super(props);
     this.state = initialState;
-
     this.toggle = this.toggle.bind(this);
     this.toggleOne = this.toggleOne.bind(this);
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);
     this.selectAlbum = this.selectAlbum.bind(this);
     this.deselectAlbum = this.deselectAlbum.bind(this);
+    this.selectArtist = this.selectArtist.bind(this);
   }
 
   componentDidMount () {
@@ -31,7 +31,7 @@ export default class AppContainer extends Component {
       .then(album => this.onLoad(convertAlbums(album)));
     
     axios.get('/api/artists/')
-      .then(res => this.setState({ artists : res.data}))
+      .then(res => this.setState({ artists : res.data}));
 
     AUDIO.addEventListener('ended', () =>
       this.next());
@@ -105,6 +105,13 @@ export default class AppContainer extends Component {
     this.setState({ selectedAlbum: {}});
   }
 
+  selectArtist (artistId) {
+    axios.get(`/api/artists/${artistId}`)
+      .then(res => this.setState({
+        selectedArtist: res.data.id
+      }));
+  }
+
   render () {
     return (
       <div id="main" className="container-fluid">
@@ -122,7 +129,8 @@ export default class AppContainer extends Component {
             albums: this.state.albums,
             selectAlbum: this.selectAlbum,
             artists: this.state.artists,
-            selectedArtist: this.state.selectedArtist
+            selectedArtist: this.state.selectedArtist,
+            selectArtist: this.selectArtist
           }) : null 
         }
         </div>
